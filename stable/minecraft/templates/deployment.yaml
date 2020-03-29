@@ -40,6 +40,16 @@ spec:
         imagePullPolicy: Always
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+{{ if .Values.startupProbe.enabled }}
+        startupProbe:
+          exec:
+            command:
+{{ toYaml .Values.startupProbe.command | indent 14 }}
+          periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+          failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          successThreshold: {{ .Values.startupProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+{{ end }}
         readinessProbe:
           exec:
             command: 
