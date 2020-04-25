@@ -43,19 +43,39 @@ service:
 eula: false
 
 server:
-  properties: {}
+  properties:
+    motd: A Minedock Minecraft Server
+  probes:
+    livenessProbe:
+      exec:
+        command:
+          - mc-monitor
+          - status
+      initialDelaySeconds: 300
+      periodSeconds: 5
+      failureThreshold: 24
+    readinessProbe:
+      exec:
+        command:
+          - mc-monitor
+          - status
+      initialDelaySeconds: 300
+      periodSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+
 
 jvm:
-  # Arguments to the java command line
-  memoryMi: 1024
+  memoryMinMi: 128
+  memoryMaxMi: 1024
 
 resources:
   limits:
     cpu: 1000m
     memory: 1024Mi
   requests:
-    cpu: 1000m
-    memory: 1024Mi
+    cpu: 100m
+    memory: 128Mi
 
 nodeSelector: {}
 

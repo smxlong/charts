@@ -37,8 +37,8 @@ spec:
           command:
             - java
           args:
-            - -Xmx{{ .Values.jvm.memoryMi }}M
-            - -Xms{{ .Values.jvm.memoryMi }}M
+            - -Xmx{{ .Values.jvm.memoryMaxMi }}M
+            - -Xms{{ .Values.jvm.memoryMinMi }}M
             - -jar
             - server.jar
             - nogui
@@ -64,6 +64,10 @@ spec:
               subPath: server.properties
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+
+          # Probes
+          {{- toYaml .Values.server.probes | nindent 10 }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
