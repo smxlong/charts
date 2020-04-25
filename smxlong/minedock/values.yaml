@@ -39,6 +39,12 @@ service:
     - 74.207.253.188
     - 45.33.45.7
 
+# Set to true to run
+eula: false
+
+server:
+  properties: {}
+
 jvm:
   # Arguments to the java command line
   memoryMi: 1024

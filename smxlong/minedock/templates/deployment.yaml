@@ -25,6 +25,10 @@ spec:
       serviceAccountName: {{ include "minedock.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "minedock.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -51,6 +55,13 @@ spec:
   #          httpGet:
   #            path: /
   #            port: http
+          volumeMounts:
+            - name: config
+              mountPath: /server/eula.txt
+              subPath: eula.txt
+            - name: config
+              mountPath: /server/server.properties
+              subPath: server.properties
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
