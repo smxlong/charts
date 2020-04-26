@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "minedock.fullname" . }}-rcon
+  labels:
+    {{- include "minedock.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.rcon.webAdmin.service.type }}
+  externalIPs:
+    {{- toYaml .Values.rcon.webAdmin.service.externalIPs | nindent 4 }}
+  ports:
+    - port: {{ .Values.rcon.webAdmin.service.uiPort }}
+      targetPort: rcon-web-ui
+      protocol: TCP
+      name: rcon-web-ui
+    - port: {{ .Values.rcon.webAdmin.service.websocketPort }}
+      targetPort: rcon-websocket
+      protocol: TCP
+      name: rcon-websocket
+  selector:
+    {{- include "minedock.selectorLabels" . | nindent 4 }}

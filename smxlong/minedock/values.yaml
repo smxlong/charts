@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: smxlong/minedock
+  repository: smxlong/minedock-base
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart version.
   tag: ""
@@ -52,6 +52,18 @@ jvm:
 persistence:
   enabled: false
   storageClassName: ""
+
+rcon:
+  webAdmin:
+    enabled: false
+    image:
+      repository: smxlong/rcon
+      pullPolicy: IfNotPresent
+      tag: apples
+    service:
+      type: NodePort
+      uiPort: 80
+      websocketPort: 8080
 
 resources: {}
 

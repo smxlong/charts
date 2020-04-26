@@ -57,14 +57,11 @@ spec:
             - name: server
               containerPort: 25565
               protocol: TCP
-  #        livenessProbe:
-  #          httpGet:
-  #            path: /
-  #            port: http
-  #        readinessProbe:
-  #          httpGet:
-  #            path: /
-  #            port: http
+            {{- if .Values.rcon.webAdmin.enabled }}
+            - name: rcon
+              containerPort: 25575
+              protocol: TCP
+            {{- end }}
           volumeMounts:
             - name: config
               mountPath: /data/eula.txt
@@ -77,8 +74,20 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
 
-          # Probes
           {{- toYaml .Values.server.probes | nindent 10 }}
+
+        {{- if .Values.rcon.webAdmin.enabled }}
+        - name: rcon-web-admin
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.rcon.webAdmin.image.repository }}:{{ .Values.rcon.webAdmin.image.tag }}"
+          imagePullPolicy: {{ .Values.rcon.webAdmin.image.pullPolicy }}
+          ports:
+            - name: rcon-web-ui
+              containerPort: 4326
+            - name: rcon-websocket
+              containerPort: 4327
+        {{- end }}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:

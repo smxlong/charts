@@ -2,3 +2,10 @@ service:
   externalIPs:
     - 74.207.253.188
     - 45.33.45.7
+
+rcon:
+  webAdmin:
+    service:
+      externalIPs:
+        - 74.207.253.188
+        - 45.33.45.7
