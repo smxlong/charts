@@ -1,0 +1,3 @@
+jvm:
+  memoryMinMi: 800
+  memoryMaxMi: 1024

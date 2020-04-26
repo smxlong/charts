@@ -29,18 +29,28 @@ spec:
         - name: config
           configMap:
             name: {{ include "minedock.fullname" . }}
+        {{- if .Values.persistence.enabled }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "minedock.fullname" . }}
+        {{- else }}
+        - name: data
+          emptyDir: {}
+        {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          workingDir: /data
           command:
             - java
           args:
             - -Xmx{{ .Values.jvm.memoryMaxMi }}M
             - -Xms{{ .Values.jvm.memoryMinMi }}M
             - -jar
-            - server.jar
+            - /server/server.jar
             - nogui
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -57,11 +67,13 @@ spec:
   #            port: http
           volumeMounts:
             - name: config
-              mountPath: /server/eula.txt
+              mountPath: /data/eula.txt
               subPath: eula.txt
             - name: config
-              mountPath: /server/server.properties
+              mountPath: /data/server.properties
               subPath: server.properties
+            - name: data
+              mountPath: /data
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
 

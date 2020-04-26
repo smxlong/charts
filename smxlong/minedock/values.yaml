@@ -35,47 +35,25 @@ securityContext: {}
 service:
   type: NodePort
   port: 25565
-  externalIPs:
-    - 74.207.253.188
-    - 45.33.45.7
 
 # Set to true to run
 eula: false
 
 server:
+  terminationGracePeriodSeconds: 60
   properties:
     motd: A Minedock Minecraft Server
-  probes:
-    livenessProbe:
-      exec:
-        command:
-          - mc-monitor
-          - status
-      initialDelaySeconds: 300
-      periodSeconds: 5
-      failureThreshold: 24
-    readinessProbe:
-      exec:
-        command:
-          - mc-monitor
-          - status
-      initialDelaySeconds: 300
-      periodSeconds: 5
-      failureThreshold: 6
-      successThreshold: 1
-
+  probes: {}
 
 jvm:
-  memoryMinMi: 128
+  memoryMinMi: 1024
   memoryMaxMi: 1024
 
-resources:
-  limits:
-    cpu: 1000m
-    memory: 1024Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
+persistence:
+  enabled: false
+  storageClassName: ""
+
+resources: {}
 
 nodeSelector: {}
 

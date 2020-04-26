@@ -1,0 +1,26 @@
+server:
+  probes:
+    livenessProbe:
+      exec:
+        command:
+          - mc-monitor
+          - status
+      initialDelaySeconds: 120
+      periodSeconds: 5
+      failureThreshold: 3
+    readinessProbe:
+      exec:
+        command:
+          - mc-monitor
+          - status
+      initialDelaySeconds: 120
+      periodSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1
+    startupProbe:
+      exec:
+        command:
+          - mc-monitor
+          - status
+      periodSeconds: 5
+      failureThreshold: 60
